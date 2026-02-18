@@ -13,13 +13,20 @@ class AuthController extends Controller
     }
 
     public function register(Request $request) {
+        // Validate input
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
 
-        User::create($data);
+        // Create user with hashed password and default role 'employee'
+        User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'role' => 'employee', // default role
+        ]);
 
         return redirect()->route('login')->with('success','Account created');
     }
