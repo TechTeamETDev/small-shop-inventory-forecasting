@@ -1,47 +1,33 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
-/*
-|--------------------------------------------------------------------------
-| Admin Routes
-|--------------------------------------------------------------------------
-| Only admin can access product management & predictions
-*/
+// Auth routes
+Route::get('/register', [AuthController::class,'showRegister'])->name('register');
+Route::post('/register', [AuthController::class,'register']);
+Route::get('/login', [AuthController::class,'showLogin'])->name('login');
+Route::post('/login', [AuthController::class,'login']);
+Route::post('/logout', [AuthController::class,'logout'])->name('logout');
+
+// Protected dashboard (redirects to role dashboards)
+Route::middleware('auth')->get('/dashboard', function () {
+    if(auth()->user()->role == 'admin') {
+        return redirect('/admin/dashboard');
+    }
+    return redirect('/employee/dashboard');
+});
+
+// Admin routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
-
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     });
-
-    // Product management routes (placeholder)
-    Route::get('/admin/products', function () {
-        return "Manage Products";
-    });
-
-    // Prediction management routes (placeholder)
-    Route::get('/admin/predictions', function () {
-        return "Manage Predictions";
-    });
 });
 
-/*
-|--------------------------------------------------------------------------
-| Employee Routes
-|--------------------------------------------------------------------------
-| Employees log sales and view stock
-*/
+// Employee routes
 Route::middleware(['auth', 'role:employee'])->group(function () {
-
     Route::get('/employee/dashboard', function () {
         return view('employee.dashboard');
-    });
-
-    Route::get('/sales', function () {
-        return "Log Sales";
-    });
-
-    Route::get('/stock', function () {
-        return "View Stock";
     });
 });
