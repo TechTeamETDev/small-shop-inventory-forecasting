@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>Register User</title>
 </head>
 <body>
-    <h2>Login</h2>
+    <h2>Register User</h2>
 
     @if ($errors->any())
         <div>
@@ -16,11 +16,20 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('users.store') }}">
         @csrf
+        <input type="text" name="name" placeholder="Name" value="{{ old('name') }}" required>
         <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
         <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Login</button>
+        <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+
+        <select name="role" required>
+            <option value="">Select role</option>
+            <option value="admin">Admin</option>
+            <option value="employee" selected>Employee</option>
+        </select>
+
+        <button type="submit">Create User</button>
     </form>
 </body>
 </html>
