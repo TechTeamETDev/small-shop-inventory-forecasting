@@ -1,37 +1,52 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
 
-// Default welcome page
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Auth routes
-Route::get('/login', [AuthController::class,'showLogin'])->name('login');
-Route::post('/login', [AuthController::class,'login']);
-Route::post('/logout', [AuthController::class,'logout'])->name('logout');
+Route::middleware(['auth', 'verified'])->group(function () {
+    
+    // 1. Dashboard
+    Route::get('/dashboard', function () {
+        $productCount = Product::count();
+        $categoryCount = Category::count();
+        $roles = Role::all();
+        $users = User::all(); 
+        
+        return view('dashboard', compact('productCount', 'categoryCount', 'roles', 'users'));
+    })->name('dashboard');
 
-// Protected routes
-Route::middleware('auth')->group(function () {
+    // 2. Role Management
+    Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+    Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::put('/roles/{id}', [RoleController::class, 'update'])->name('roles.update');
+    Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
 
-    // Admin routes (manage users)
-    Route::middleware('can:isAdmin')->group(function () {
-        Route::get('/admin/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
+    // 3. User & Role Assignment Management
+    // This route handles the "Update" button in your dashboard user table
+    Route::put('/users/{user}/role', [ProfileController::class, 'updateRole'])->name('users.update-role');
+    
+    // This route handles deleting accounts
+    Route::delete('/users/{id}', [ProfileController::class, 'destroyUser'])->name('users.destroy');
 
-        Route::get('/users', [UserController::class,'index'])->name('users.index');
-        Route::get('/users/create', [UserController::class,'create'])->name('users.create');
-        Route::post('/users', [UserController::class,'store'])->name('users.store');
-    });
+    // 4. Inventory Management
+    Route::resource('categories', CategoryController::class);
+    Route::resource('products', ProductController::class);
 
-    // Employee dashboard
-  Route::middleware(['auth', 'can:isEmployee'])->group(function () {
-    Route::get('/employee/dashboard', function () {
-        return view('employee.dashboard');
-    })->name('employee.dashboard');
+    // 5. Profile Management
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-});
+
+require __DIR__.'/auth.php';
