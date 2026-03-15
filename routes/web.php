@@ -1,20 +1,26 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UserController;
 
 // Public route
 Route::get('/', function () {
     return view('welcome');
 });
-
-// Authenticated routes
-Route::middleware(['auth','force.password.reset'])->group(function () {
+// Authenticated routes (including dashboard & profile)
+Route::middleware(['auth', 'force.password.reset'])->group(function () {
 
     // Dashboard — dynamic content based on @can() in Blade
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
+
+    // Profile routes
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 
     // Sales routes (permission-based)
     Route::middleware(['permission:create sales'])->group(function () {
@@ -65,5 +71,29 @@ Route::post('/password/reset/custom', function (\Illuminate\Http\Request $reques
     return redirect('/dashboard')->with('success', 'Password updated!');
 })->name('password.reset.custom.post');
 
+//placeholders to test the dashboard links:
+Route::get('/products', function() { return "Products List"; })->name('products.index');
+Route::get('/products/create', function() { return "Create Product Form"; })->name('products.create');
+
+Route::get('/sales', function() { return "Sales List"; })->name('sales.index');
+Route::get('/sales/create', function() { return "Record Sale Form"; })->name('sales.create');
+
+Route::middleware(['permission:view analytics'])->group(function () {
+    Route::get('/analytics', function() {
+        return "Analytics Page";
+    })->name('analytics.index');
+});
+
+Route::middleware(['auth','permission:manage users'])->group(function () {
+
+    Route::resource('users', UserController::class);
+
+    Route::post('/users/{user}/reset-password',
+        [UserController::class,'resetPassword'])
+        ->name('users.reset');
 
 });
+});
+
+
+require __DIR__.'/auth.php';
