@@ -32,5 +32,15 @@
                 {{ $slot }}
             </main>
         </div>
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                @include('layouts.sidebar')
+            </div>
+            <div class="col-md-10">
+                @yield('content')
+            </div>
+        </div>
+    </div>
     </body>
 </html>
