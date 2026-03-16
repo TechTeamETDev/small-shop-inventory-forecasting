@@ -34,4 +34,11 @@ class UserController extends Controller
 
         return redirect()->route('users.index')->with('success','User created successfully.');
     }
+    public function edit(User $user)
+{
+    $permissions = Permission::all(); // Get all permissions (add, delete, etc.)
+    $userPermissions = $user->permissions->pluck('name')->toArray(); // Get what the user already has
+
+    return view('users.edit', compact('user', 'permissions', 'userPermissions'));
+}
 }
