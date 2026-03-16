@@ -2,39 +2,31 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Traits\HasRoles; // This handles the checkboxes logic
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
-    // Allow mass assignment of role
     protected $fillable = [
         'name',
         'email',
         'password',
-        'role',
     ];
 
-    // Hidden fields in arrays/JSON
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    // Cast password to hashed automatically
-    protected $casts = [
-        'password' => 'hashed',
-    ];
-
-    // Helper methods
-    public function isAdmin(): bool {
-        return $this->role === 'admin';
-    }
-
-    public function isEmployee(): bool {
-        return $this->role === 'employee';
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 }
