@@ -11,18 +11,23 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'permission:manage products']);
+        // Only require authentication here
+        $this->middleware('auth');
     }
 
+    // View products
     public function index()
     {
+        $this->authorize('view products'); // check permission dynamically
         $products = Product::with('category')->orderBy('id','desc')->paginate(10);
         $categories = Category::all();
         return view('products.index', compact('products','categories'));
     }
 
+    // Create product
     public function store(Request $request)
     {
+        $this->authorize('create products'); // check permission
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
@@ -54,13 +59,17 @@ class ProductController extends Controller
         return response()->json(['success' => 'Product created successfully']);
     }
 
+    // Edit product
     public function edit(Product $product)
     {
+        $this->authorize('edit products'); // check permission
         return response()->json($product);
     }
 
+    // Update product
     public function update(Request $request, Product $product)
     {
+        $this->authorize('edit products'); // check permission
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
@@ -91,8 +100,10 @@ class ProductController extends Controller
         return response()->json(['success' => 'Product updated successfully']);
     }
 
+    // Delete product
     public function destroy(Product $product)
     {
+        $this->authorize('delete products'); // check permission
         $product->delete();
 
         // Remove related low-stock alerts & AI predictions

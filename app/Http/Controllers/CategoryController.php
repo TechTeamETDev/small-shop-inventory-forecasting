@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Category;
@@ -22,13 +21,16 @@ class CategoryController extends Controller
     // Store new category
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
         ]);
 
-        Category::create(['name' => $request->name]);
+        $category = Category::create($validated);
 
-        return response()->json(['success' => 'Category created successfully']);
+        return response()->json([
+            'success' => 'Category created successfully',
+            'category' => $category
+        ]);
     }
 
     // Edit category (AJAX fetch)
@@ -40,13 +42,16 @@ class CategoryController extends Controller
     // Update category
     public function update(Request $request, Category $category)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
         ]);
 
-        $category->update(['name' => $request->name]);
+        $category->update($validated);
 
-        return response()->json(['success' => 'Category updated successfully']);
+        return response()->json([
+            'success' => 'Category updated successfully',
+            'category' => $category
+        ]);
     }
 
     // Delete category

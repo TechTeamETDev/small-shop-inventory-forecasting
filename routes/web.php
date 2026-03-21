@@ -138,7 +138,7 @@ Route::middleware(['auth', 'force.password.reset'])->group(function () {
         session(['last_activity_time' => now()->timestamp]);
         return response()->json(['status' => 'ok']);
     });
-
+   
 });
 
 require __DIR__.'/auth.php';

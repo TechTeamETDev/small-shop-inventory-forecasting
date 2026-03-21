@@ -19,6 +19,15 @@ Dashboard
 </div>
 @endcan
 
+{{-- CATEGORIES --}}
+@can('manage categories')
+<div class="bg-white shadow p-6 rounded">
+    <h2 class="font-semibold text-lg mb-2">Categories</h2>
+    <p class="text-gray-600 mb-4">Manage product categories.</p>
+    <a href="{{ route('categories.index') }}" class="text-teal-600 hover:underline">Go to Categories</a>
+</div>
+@endcan
+
 {{-- SALES --}}
 @can('create sales')
 <div class="bg-white shadow p-6 rounded">

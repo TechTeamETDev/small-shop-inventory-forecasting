@@ -73,6 +73,7 @@
     <!-- Page Content -->
     <main class="p-6">
         @yield('content')  {{-- ✅ ONLY ONE --}}
+        @yield('scripts')
     </main>
 
 </div>
