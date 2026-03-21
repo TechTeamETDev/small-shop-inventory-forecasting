@@ -93,6 +93,12 @@ Route::middleware(['auth','permission:manage users'])->group(function () {
         ->name('users.reset');
 
 });
+
+
+Route::post('/keep-alive', function () {
+    session(['last_activity_time' => now()->timestamp]);
+    return response()->json(['status' => 'ok']);
+})->middleware('auth');
 });
 
 
