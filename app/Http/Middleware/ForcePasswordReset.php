@@ -9,10 +9,15 @@ class ForcePasswordReset
 {
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->must_reset_password) {
-            // Avoid redirect loop
-            if ($request->path() !== 'password/reset/custom') {
-                return redirect('/password/reset/custom');
+        $user = Auth::user();
+
+        if ($user && $user->must_reset_password) {
+            // Allow GET and POST for the reset route
+            if (!in_array($request->route()->getName(), [
+                'password.reset.custom',
+                'password.reset.custom.post'
+            ])) {
+                return redirect()->route('password.reset.custom');
             }
         }
 

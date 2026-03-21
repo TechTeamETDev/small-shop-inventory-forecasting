@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Configuration\Exceptions;
-use Spatie\Permission\Middlewares\PermissionMiddleware;
+use Illuminate\Foundation\Configuration\Exceptions as ExceptionConfig;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -11,20 +10,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function ($middleware) {
+
+        // ✅ Middleware aliases
         $middleware->alias([
-            // Your custom middleware aliases
             'force.password.reset' => \App\Http\Middleware\ForcePasswordReset::class,
-            'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
-            'role' => \Spatie\Permission\Middlewares\Role::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'session.timeout' => \App\Http\Middleware\SessionTimeout::class,
         ]);
 
-        // Add global middleware to groups
-        $middleware->group('web', [
-            \App\Http\Middleware\SessionTimeout::class, // session timeout for web routes
-        ]);
+        // ✅ Add SessionTimeout to web group (correct way)
+        $middleware->appendToGroup('web', \App\Http\Middleware\SessionTimeout::class);
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        // exception config if needed
+    ->withExceptions(function (ExceptionConfig $exceptions): void {
+        //
     })
     ->create();

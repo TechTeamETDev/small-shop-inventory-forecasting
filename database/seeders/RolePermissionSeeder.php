@@ -29,22 +29,27 @@ class RolePermissionSeeder extends Seeder
             'view analytics',
             'view profit reports',
 
+            'manage categories',
             'manage users'
+            
         ];
 
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+            Permission::firstOrCreate([
+                'name' => $permission,
+                'guard_name' => 'web', // ⚡ important!
+            ]);
         }
 
-        $admin = Role::firstOrCreate(['name' => 'Admin']);
-        $employee = Role::firstOrCreate(['name' => 'Employee']);
+        $admin = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
+        $employee = Role::firstOrCreate(['name' => 'Employee', 'guard_name' => 'web']);
 
         $admin->syncPermissions(Permission::all());
 
-        $employee->syncPermissions([
+        $employee->syncPermissions(Permission::whereIn('name', [
             'view products',
             'create sales',
             'view sales'
-        ]);
+        ])->get());
     }
 }

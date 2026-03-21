@@ -15,7 +15,7 @@ Dashboard
 <div class="bg-white shadow p-6 rounded">
 <h2 class="font-semibold text-lg mb-2">Inventory</h2>
 <p class="text-gray-600 mb-4">View and manage product stock.</p>
-<a href="/products" class="text-blue-500 hover:underline">Go to Products</a>
+<a href="{{ route('products.index') }}" class="text-blue-500 hover:underline">Go to Products</a>
 </div>
 @endcan
 
