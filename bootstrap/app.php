@@ -14,15 +14,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             // Your custom middleware aliases
             'force.password.reset' => \App\Http\Middleware\ForcePasswordReset::class,
-            'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
-            'role' => \Spatie\Permission\Middlewares\Role::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role' => \Spatie\Permission\Middleware\Role::class,
             'session.timeout' => \App\Http\Middleware\SessionTimeout::class,
         ]);
 
-        // Add global middleware to groups
-        $middleware->group('web', [
-            \App\Http\Middleware\SessionTimeout::class, // session timeout for web routes
-        ]);
+        // ✅ Append to existing web middleware (DO NOT override)
+    $middleware->appendToGroup('web', [
+        \App\Http\Middleware\SessionTimeout::class,
+    ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // exception config if needed
