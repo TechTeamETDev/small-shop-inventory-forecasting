@@ -16,98 +16,91 @@ class UserController extends Controller
         $this->middleware(['auth','permission:manage users']);
     }
 
-    // Show all users
+    // List users
     public function index()
     {
         $users = User::paginate(10);
         $roles = Role::all();
-
         return view('users.index', compact('users','roles'));
     }
 
-    // Create new user (admin registration)
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name'  => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'role'  => 'required|exists:roles,name',
-        ]);
+    // Store new user (admin creates employee)
+   public function store(Request $request)
+{
+    // Validate input
+    $request->validate([
+        'name'  => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'role'  => 'required|exists:roles,name',
+    ]);
 
-        $password = Str::random(12);
+    // Generate a temporary password
+    $tempPassword = Str::random(10);
 
-        $user = User::create([
-            'name'  => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($password),
-            'must_reset_password' => true,
-        ]);
+    // Create the user with temporary password
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($tempPassword),
+        'must_reset_password' => true, // force first login reset
+    ]);
 
-        $user->assignRole($request->role);
+    // Assign the selected role
+    $user->assignRole($request->role);
 
-        // Send email with temporary password
-        $user->notify(new NewAccountNotification($user,$password));
-
-        return redirect()->route('users.index')
-            ->with('success',"User {$user->name} created successfully");
+    // Send the temporary password via email immediately
+    try {
+        $user->notify(new NewAccountNotification($user, $tempPassword));
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => "User created, but failed to send email: {$e->getMessage()}"
+        ], 500);
     }
 
-    // View user profile
-    public function show(User $user)
-    {
-        return view('users.show', compact('user'));
-    }
+    // Return success response (for AJAX)
+    return response()->json([
+        'message' => "User {$user->name} created successfully. Temporary password sent via email."
+    ]);
+}
 
-    // Edit user
-    public function edit(User $user)
-    {
-        $roles = Role::all();
-
-        return view('users.edit', compact('user','roles'));
-    }
-
-    // Update user
+    // Update user info
     public function update(Request $request, User $user)
     {
         $request->validate([
             'name'  => 'required|string|max:255',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'role'  => 'required|exists:roles,name',
         ]);
 
         $user->update([
-            'name'  => $request->name,
+            'name' => $request->name,
             'email' => $request->email,
         ]);
 
         $user->syncRoles([$request->role]);
 
-        return redirect()->route('users.index')
-            ->with('success',"User {$user->name} updated");
+        return response()->json(['message' => "User {$user->name} updated successfully."]);
     }
 
     // Delete user
     public function destroy(User $user)
     {
         $user->delete();
-
-        return redirect()->route('users.index')
-            ->with('success','User deleted');
+        return response()->json(['message' => 'User deleted successfully.']);
     }
 
-    // Reset password
+    // Reset user password (admin action)
     public function resetPassword(User $user)
     {
-        $newPassword = Str::random(10);
+        $tempPassword = Str::random(10);
 
         $user->update([
-            'password' => Hash::make($newPassword),
+            'password' => Hash::make($tempPassword),
             'must_reset_password' => true,
         ]);
 
-        $user->notify(new NewAccountNotification($user,$newPassword));
+        $user->notify(new NewAccountNotification($user, $tempPassword));
 
-        return redirect()->back()
-            ->with('success',"Password reset for {$user->name}");
+        return response()->json(['message' => "Password reset. Temporary password sent via email."]);
     }
 }

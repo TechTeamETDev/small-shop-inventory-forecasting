@@ -11,8 +11,8 @@ class ForcePasswordReset
     {
         if (Auth::check() && Auth::user()->must_reset_password) {
             // Avoid redirect loop
-            if ($request->path() !== 'password/reset/custom') {
-                return redirect('/password/reset/custom');
+            if ($request->route()->getName() !== 'password.reset.custom') {
+                return redirect()->route('password.reset.custom');
             }
         }
 

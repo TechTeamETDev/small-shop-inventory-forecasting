@@ -10,8 +10,8 @@ class NewAccountNotification extends Notification
 {
     use Queueable;
 
-    protected $user;
-    protected $password;
+    public $user;
+    public $password;
 
     public function __construct($user, $password)
     {
@@ -32,7 +32,7 @@ class NewAccountNotification extends Notification
                     ->line("An account has been created for you.")
                     ->line("Email: {$this->user->email}")
                     ->line("Temporary Password: {$this->password}")
-                    ->action('Login', url('/login'))
+                    ->action('Login', route('login'))
                     ->line('You will be required to reset your password on first login.');
     }
 }
