@@ -7,7 +7,7 @@
     <h2 class="text-xl font-bold mb-4">User Management</h2>
 
     <!-- Add User Button -->
-    <button onclick="openCreateModal()" class="bg-green-600 text-white px-4 py-2 mb-4">
+    <button onclick="openCreateModal()" class="bg-green-600 text-blue px-4 py-2 mb-4">
         + Add User
     </button>
 
