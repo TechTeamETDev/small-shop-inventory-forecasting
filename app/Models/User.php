@@ -20,8 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',                  // add role if you want mass assignment
-        'must_reset_password',   // ✅ add this for first-login reset
+        'role',
     ];
 
     /**
@@ -40,8 +39,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'password' => 'hashed', // Laravel 10+ automatic hashing
-        'must_reset_password' => 'boolean', // ✅ cast as boolean
+        'password' => 'hashed',
     ];
 
     /**

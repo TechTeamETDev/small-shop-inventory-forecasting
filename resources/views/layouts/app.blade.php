@@ -70,12 +70,10 @@
         </header>
     @endisset
 
-    <!-- Page Content -->
-    <main class="p-6">
-        @yield('content')  {{-- ✅ ONLY ONE --}}
-    </main>
-
-</div>
-
-</body>
+            <!-- Page Content -->
+            <main>
+                {{ $slot }}
+            </main>
+        </div>
+    </body>
 </html>

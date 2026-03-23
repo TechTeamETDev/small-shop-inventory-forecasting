@@ -9,26 +9,14 @@ class AdminUserSeeder extends Seeder
 {
     public function run()
     {
-        // Seeder admin
-        $admin = User::firstOrCreate(
-            ['email' => 'admin@example.com'],
+        // Create default admin if not exists
+        User::firstOrCreate(
+            ['email' => 'admin@example.com'], // default email
             [
                 'name' => 'Admin',
-                'password' => bcrypt('password'),
-                'must_reset_password' => false, // normal login
+                'password' => Hash::make('password123'), // default password
+                'role' => 'admin',
             ]
         );
-        $admin->assignRole('Admin');
-
-        // Seeder employee
-        $employee = User::firstOrCreate(
-            ['email' => 'employee@example.com'],
-            [
-                'name' => 'Employee User',
-                'password' => bcrypt('password'),
-                'must_reset_password' => true, // first login reset
-            ]
-        );
-        $employee->assignRole('Employee');
     }
 }
