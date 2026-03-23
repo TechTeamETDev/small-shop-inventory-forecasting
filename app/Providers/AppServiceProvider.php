@@ -4,10 +4,15 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Pagination\Paginator;
+
+
 
 class AppServiceProvider extends ServiceProvider
+
 {
-    /**
+
+ /**
      * Register any application services.
      */
     public function register(): void
@@ -23,5 +28,8 @@ class AppServiceProvider extends ServiceProvider
         // RBAC Gates
         Gate::define('isAdmin', fn($user) => $user->role === 'admin');
         Gate::define('isEmployee', fn($user) => $user->role === 'employee');
-    }
+  
+              Paginator::useTailwind();      }
+
+   
 }

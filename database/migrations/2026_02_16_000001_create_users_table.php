@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->string('password');
             $table->enum('role', ['admin', 'employee'])->default('employee'); // added role
+            $table->boolean('must_reset_password')->default(false); // ✅ added for first-login password reset
             $table->rememberToken();
             $table->timestamps();
         });
