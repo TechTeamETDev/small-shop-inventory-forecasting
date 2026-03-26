@@ -70,18 +70,21 @@ export default function Welcome({ auth }) {
                         </a>
                     ) : (
                         <>
+                            {" "}
                             <a
                                 href="/login"
                                 className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
                             >
                                 Login
                             </a>
-                            <a
-                                href="/register"
-                                className="px-8 py-3 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
-                            >
-                                Register
-                            </a>
+                            {/*
+<a
+    href="/register"
+    className="px-8 py-3 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+>
+    Register
+</a>
+*/}
                         </>
                     )}
                 </div>
