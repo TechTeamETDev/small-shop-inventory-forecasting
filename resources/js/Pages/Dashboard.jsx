@@ -181,17 +181,17 @@ const Dashboard = () => {
     );
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="min-h-screen bg-gray-50">
             {/* Sidebar */}
             <aside
-                className={`fixed top-0 left-0 h-full bg-white shadow-xl transition-all duration-300 z-20 ${sidebarOpen ? "w-64" : "w-20"}`}
+                className={`fixed top-0 left-0 h-full bg-white shadow-lg transition-all duration-300 z-20 ${sidebarOpen ? "w-64" : "w-20"}`}
             >
                 {/* Sidebar Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-200">
                     {sidebarOpen && (
                         <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg"></div>
-                            <span className="font-bold text-gray-800">
+                            <div className="w-8 h-8 bg-blue-500 rounded-lg"></div>
+                            <span className="font-semibold text-gray-800">
                                 POS System
                             </span>
                         </div>
@@ -291,104 +291,114 @@ const Dashboard = () => {
                 className={`transition-all duration-300 ${sidebarOpen ? "ml-64" : "ml-20"}`}
             >
                 {/* Header */}
-                <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
-                    <div className="px-4 sm:px-6 lg:px-8 py-4">
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-                                    Dashboard
-                                </h1>
-                                <p className="text-gray-500 text-sm mt-0.5">
-                                    Welcome back, {auth.user.name || "User"}!
-                                </p>
-                            </div>
-                        </div>
+                <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+                    <div className="px-6 py-4">
+                        <h1 className="text-xl font-semibold text-gray-800">
+                            Dashboard
+                        </h1>
+                        <p className="text-sm text-gray-500 mt-1">
+                            Welcome back, {auth.user.name || "User"}!
+                        </p>
                     </div>
                 </div>
 
-                {/* Report Section - Middle Content */}
+                {/* Stats Cards */}
                 <div className="p-6">
-                    <div className="max-w-7xl mx-auto">
-                        {/* Stats Overview Cards */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-blue-100 text-sm">
-                                            Total Products
-                                        </p>
-                                        <p className="text-3xl font-bold">--</p>
-                                    </div>
-                                    <div className="bg-white/20 rounded-lg p-3">
-                                        <svg
-                                            className="w-6 h-6"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                                            />
-                                        </svg>
-                                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        {/* Total Products */}
+                        <div className="bg-white rounded-lg border border-gray-200 p-5">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-1">
+                                        Total Products
+                                    </p>
+                                    <p className="text-2xl font-semibold text-gray-800">
+                                        --
+                                    </p>
                                 </div>
-                            </div>
-                            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-green-100 text-sm">
-                                            Today's Sales
-                                        </p>
-                                        <p className="text-3xl font-bold">--</p>
-                                    </div>
-                                    <div className="bg-white/20 rounded-lg p-3">
-                                        <svg
-                                            className="w-6 h-6"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-purple-100 text-sm">
-                                            Low Stock Items
-                                        </p>
-                                        <p className="text-3xl font-bold">--</p>
-                                    </div>
-                                    <div className="bg-white/20 rounded-lg p-3">
-                                        <svg
-                                            className="w-6 h-6"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                                            />
-                                        </svg>
-                                    </div>
+                                <div className="bg-blue-100 rounded-lg p-2">
+                                    <svg
+                                        className="w-5 h-5 text-blue-600"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                                        />
+                                    </svg>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Feature Cards Grid - Main Report Section */}
+                        {/* Today's Sales */}
+                        <div className="bg-white rounded-lg border border-gray-200 p-5">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-1">
+                                        Today's Sales
+                                    </p>
+                                    <p className="text-2xl font-semibold text-gray-800">
+                                        --
+                                    </p>
+                                </div>
+                                <div className="bg-green-100 rounded-lg p-2">
+                                    <svg
+                                        className="w-5 h-5 text-green-600"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Low Stock Items */}
+                        <div className="bg-white rounded-lg border border-gray-200 p-5">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-1">
+                                        Low Stock Items
+                                    </p>
+                                    <p className="text-2xl font-semibold text-gray-800">
+                                        --
+                                    </p>
+                                </div>
+                                <div className="bg-red-100 rounded-lg p-2">
+                                    <svg
+                                        className="w-5 h-5 text-red-600"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Additional Info Section (Optional) */}
+                    <div className="mt-6">
+                        <p className="text-sm text-gray-400 text-center">
+                            Dashboard overview - Update your data from the
+                            sidebar menu
+                        </p>
                     </div>
                 </div>
             </div>
