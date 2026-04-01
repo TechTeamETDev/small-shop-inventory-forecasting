@@ -2,39 +2,49 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Traits\HasRoles; // Spatie Role/Permission trait
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
-    // Allow mass assignment of role
+    /**
+     * The attributes that are mass assignable.
+     */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'role',
+        'status',
+        'last_activity',
+        'must_reset_password',
     ];
 
-    // Hidden fields in arrays/JSON
+    /**
+     * The attributes that should be hidden for arrays.
+     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    // Cast password to hashed automatically
+    /**
+     * The attributes that should be cast.
+     */
     protected $casts = [
-        'password' => 'hashed',
+         'password' => 'hashed',
+        'email_verified_at' => 'datetime',
+        'last_activity' => 'datetime',
+        'must_reset_password' => 'boolean',
     ];
+   
 
-    // Helper methods
-    public function isAdmin(): bool {
-        return $this->role === 'admin';
-    }
-
-    public function isEmployee(): bool {
-        return $this->role === 'employee';
-    }
+    /**
+     * Automatically hash password when set
+     */
+   
 }
